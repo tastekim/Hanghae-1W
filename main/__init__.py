@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template
 from . import posts, user
 
 app = Flask(__name__)
@@ -8,4 +8,4 @@ app.register_blueprint(user.bp_user)
 
 @app.route('/')
 def home():
-    return "this is home"
+    return render_template('profile.html')

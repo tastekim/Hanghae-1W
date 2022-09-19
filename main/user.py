@@ -11,4 +11,4 @@ bp_user = Blueprint("user", __name__, url_prefix="/user")
 
 @bp_user.route('/')
 def home():
-    return "this is user"
+    return jsonify({"msg" : "GET 완료"})
