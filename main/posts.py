@@ -12,4 +12,4 @@ bp_post = Blueprint("posts", __name__, url_prefix="/post", template_folder='temp
 
 @bp_post.route('/')
 def home():
-    return render_template('index.html')
+    return render_template('posting.html')
