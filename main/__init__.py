@@ -8,4 +8,4 @@ app.register_blueprint(user.bp_user)
 
 @app.route('/')
 def home():
-    return render_template('profile.html')
+    return "this is home"
