@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, jsonify, Blueprint
+from datetime import datetime
 from pymongo import MongoClient
 import certifi
 
@@ -13,3 +14,25 @@ bp_post = Blueprint("posts", __name__, url_prefix="/post", template_folder='temp
 def home():
     return render_template('posting.html')
 
+@bp_post.route('/posting', methods=['POST'])
+def posting():
+    selectFood_receive = request.form["selectFood_give"]
+    content_receive = request.form["content_give"]
+    file = request.files["file_give"]
+
+    extension = file.filename.split('.')[-1]
+
+    today = datetime.now()
+    mytime = today.strftime('%Y-%m-%d-%H-%M-%S')
+    filename = f'file-{mytime}'
+    save_to = f'static/{filename}.{extension}'
+    file.save(save_to)
+
+    doc = {
+        'selectFood': selectFood_receive,
+        'content':content_receive,
+        'file': f'{filename}.{extension}'
+    }
+    db.posts.insert_one(doc)
+
+    return jsonify({'msg':'업로드 완료!'})

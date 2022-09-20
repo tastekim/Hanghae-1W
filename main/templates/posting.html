@@ -5,7 +5,10 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <!-- Bulma CSS 링크 -->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
-
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+                integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+                crossorigin="anonymous"></script>
         <style>
             * {
                 box-sizing: border-box;
@@ -46,6 +49,33 @@
             }
         </style>
         <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=cc1279bfac51f44586842831080632f7&libraries=services"></script>
+        <script>
+            function posting() {
+                let selectFood = $('#selectFood').val()
+                let content = $("#landing-content").val()
+
+                let file = $('#input-pic')[0].files[0]
+                let form_data = new FormData()
+
+                form_data.append("file_give", file)
+                form_data.append("selectFood_give", selectFood)
+                form_data.append("content_give", content)
+
+                $.ajax({
+                    type: "POST",
+                    url: "/posting",
+                    data: form_data,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    success: function (response) {
+                        alert(response["msg"])
+                        window.location.reload()
+                    }
+                });
+            }
+        </script>
+
     </head>
 
 <body>
@@ -66,29 +96,29 @@
         <div class="" id="location">
             <div id="map"></div>
         </div>
+        <div id="clickLatlng"></div>
 
-        <div class="field">
-            <label class="label" for="input-pic">사진</label>
-
-            <div class="control is-expanded">
-                <div class="file has-name">
-                    <label class="file-label" style="width:100%">
-                        <input id="input-pic" class="file-input" type="file"
-                               name="resume">
-                        <span class="file-cta">
-                                <span class="file-label">파일 선택</span>
-                            </span>
-                        <span id="file-name" class="file-name"
-                              style="width:100%;max-width:100%">음식 사진 첨부하기 🍽</span>
-                    </label>
-                </div>
-            </div>
+        <div id="file-with-js"
+             class="file has-name is-expanded">
+            <label class="file-label" style="width:100%">
+                <input class="file-input"
+                       type="file" name="selected-image">
+                <span class="file-cta">
+                    <span class="file-label">
+                        파일 선택
+                    </span>
+                </span>
+                <span class="file-name" style="width: 100%; max-width: 100%">
+                   음식 사진 첨부하기 🍽
+                </span>
+            </label>
         </div>
+
 
         <label for="landing-content" class="label">글 내용</label>
         <textarea class="textarea" placeholder="내용을 입력하세요" rows="10" id="landing-content"></textarea>
         <div class="button-group">
-            <button type="submit" class="button is-normal is-success is-light">등록</button>
+            <button type="submit" class="button is-normal is-success is-light" onclick="posting()">등록</button>
             <button type="button" class="button is-light is-normal ">취소</button>
         </div>
     </form>
@@ -103,56 +133,136 @@
 
             let map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
 
-            {#const locationLoadSuccess = pos => {#}
-            {#    const currentPos = new kakao.maps.LatLng(pos.coords.latitude,pos.coords.longitude)#}
-            {#    map.panTo(currentPos)#}
-            {#    }#}
-            {#navigator.geolocation.getCurrentPosition(locationLoadSuccess)#}
+            // 지도를 클릭한 위치에 표출할 마커입니다
+            var marker = new kakao.maps.Marker({
+                // 지도 중심좌표에 마커를 생성합니다
+                position: map.getCenter()
+            });
 
+            // 지도에 마커를 표시합니다
+            marker.setMap(map);
+
+            // 주소-좌표 변환 객체를 생성합니다
+            let geocoder = new kakao.maps.services.Geocoder();
+
+            var places = new kakao.maps.services.Places();
+
+            var callback = function (result, status) {
+                if (status === kakao.maps.services.Status.OK) {
+                    console.log(result[0]);
+                }
+            };
+
+            places.keywordSearch('판교 치킨', callback);
+
+            // 지도에 클릭 이벤트를 등록합니다
+            // 지도를 클릭하면 마지막 파라미터로 넘어온 함수를 호출합니다
+            kakao.maps.event.addListener(map, 'click', function (mouseEvent) {
+
+                // 클릭한 위도, 경도 정보를 가져옵니다
+                var latlng = mouseEvent.latLng;
+
+                // 마커 위치를 클릭한 위치로 옮깁니다
+                marker.setPosition(latlng);
+                let x = latlng.getLat();
+                let y = latlng.getLng();
+                console.log(x,y)
+
+                function getAddr(x, y) {
+
+
+                    let coord = new kakao.maps.LatLng(x, y);
+                    let callback = function (result, status) {
+                        if (status === kakao.maps.services.Status.OK) {
+                            console.log(result[0].road_address.address_name);
+                        }
+                    }
+                    geocoder.coord2Address(coord.getLng(), coord.getLat(), callback);
+                }
+                getAddr(x,y);
+
+                var message = '클릭한 위치의 위도는 ' + latlng.getLat() + ' 이고, ';
+                message += '경도는 ' + latlng.getLng() + ' 입니다';
+
+                var resultDiv = document.getElementById('clickLatlng');
+                resultDiv.innerHTML = message;
+
+            });
+
+            //현재 위치 찾기
+            const locationLoadSuccess = pos => {
+                const currentPos = new kakao.maps.LatLng(pos.coords.latitude,pos.coords.longitude)
+                map.panTo(currentPos)
+                }
+
+            if(locationLoadSuccess){
+            navigator.geolocation.getCurrentPosition(locationLoadSuccess)
+            }
             // 장소 검색 객체를 생성합니다
             var ps = new kakao.maps.services.Places();
 
             // 키워드로 장소를 검색합니다
-            ps.keywordSearch('강남 맛집', placesSearchCB);
+            // ps.keywordSearch('강남 맛집', placesSearchCB);
 
             // 키워드 검색 완료 시 호출되는 콜백함수 입니다
-            function placesSearchCB(data, status, pagination) {
-                if (status === kakao.maps.services.Status.OK) {
-
-                    // 검색된 장소 위치를 기준으로 지도 범위를 재설정하기위해
-                    // LatLngBounds 객체에 좌표를 추가합니다
-                    var bounds = new kakao.maps.LatLngBounds();
-
-                    for (var i = 0; i < data.length; i++) {
-                        displayMarker(data[i]);
-                        bounds.extend(new kakao.maps.LatLng(data[i].y, data[i].x));
-                    }
-
-                    // 검색된 장소 위치를 기준으로 지도 범위를 재설정합니다
-                    map.setBounds(bounds);
-                }
-            }
-
-            // 지도에 마커를 표시하는 함수입니다
-            function displayMarker(place) {
-
-                // 마커를 생성하고 지도에 표시합니다
-                var marker = new kakao.maps.Marker({
-                    map: map,
-                    position: new kakao.maps.LatLng(place.y, place.x)
-                });
-
-                // 마커에 클릭이벤트를 등록합니다
-                kakao.maps.event.addListener(marker, 'click', function () {
-                    // 마커를 클릭하면 장소명이 인포윈도우에 표출됩니다
-                    infowindow.setContent('<div style="padding:5px;font-size:12px;">' + place.place_name + '</div>');
-                    infowindow.open(map, marker);
-                });
-            }
+            // function placesSearchCB(data, status, pagination) {
+            //     if (status === kakao.maps.services.Status.OK) {
+            //
+            //         // 검색된 장소 위치를 기준으로 지도 범위를 재설정하기위해
+            //         // LatLngBounds 객체에 좌표를 추가합니다
+            //         var bounds = new kakao.maps.LatLngBounds();
+            //
+            //         for (var i = 0; i < data.length; i++) {
+            //             displayMarker(data[i]);
+            //             bounds.extend(new kakao.maps.LatLng(data[i].y, data[i].x));
+            //         }
+            //
+            //         // 검색된 장소 위치를 기준으로 지도 범위를 재설정합니다
+            //         map.setBounds(bounds);
+            //     }
+            // }
+            //
+            // // 지도에 마커를 표시하는 함수입니다
+            // function displayMarker(place) {
+            //
+            //     // 마커를 생성하고 지도에 표시합니다
+            //     var marker = new kakao.maps.Marker({
+            //         map: map,
+            //         position: new kakao.maps.LatLng(place.y, place.x)
+            //     });
+            //
+            //     // 마커에 클릭이벤트를 등록합니다
+            //     kakao.maps.event.addListener(marker, 'click', function () {
+            //         // 마커를 클릭하면 장소명이 인포윈도우에 표출됩니다
+            //         infowindow.setContent('<div style="padding:5px;font-size:12px;">' + place.place_name + '</div>');
+            //         infowindow.open(map, marker);
+            //     });
+            // }
 
 
 
         </script>
+        <script>
+            // Select the input element using
+            // document.querySelector
+            var input = document.querySelector(
+                "#file-with-js>.file-label>.file-input"
+            );
+            console.log(input)
 
+            // Bind an listener to onChange event of the input
+            input.onchange = function () {
+                if (input.files.length > 0) {
+                    var fileNameContainer =
+                        document.querySelector(
+                            "#file-with-js>.file-label>.file-name"
+                        );
+                    // set the inner text of fileNameContainer
+                    // to the name of the file
+                    fileNameContainer.textContent =
+                        input.files[0].name;
+                }
+            }
+        </script>
 </body>
 </html>
