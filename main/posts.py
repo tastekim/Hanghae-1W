@@ -1,17 +1,15 @@
-from flask import Flask, render_template, request, jsonify, Blueprint
-app = Flask(__name__)
-
-from datetime import datetime
-from pymongo import MongoClient
+from main import *
+from flask import Blueprint, request
 import certifi
+
+bp_login = Blueprint("login", __name__, url_prefix="/login", template_folder='templates')
 
 # db 연결
 ca = certifi.where()
 client = MongoClient('mongodb://15.164.214.98', 27017, username="test", password="test")
 db = client.yoryjory
 
-# client = MongoClient('mongodb+srv://test:sparta@cluster0.iilav5q.mongodb.net/?retryWrites=true&w=majority')
-
+SECRET_KEY = 'SPARTA'
 
 bp_post = Blueprint("posts", __name__, url_prefix="/posts", template_folder='templates')
 

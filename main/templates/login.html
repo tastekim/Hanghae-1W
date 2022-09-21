@@ -102,7 +102,7 @@
                 }
                 $.ajax({
                     type: "POST",
-                    url: "/sign_in",
+                    url: "/login/sign_in",
                     data: {
                         username_give: username,
                         password_give: password
@@ -157,7 +157,7 @@
                 }
                 $.ajax({
                     type: "POST",
-                    url: "/sign_up/save",
+                    url: "/login/sign_up/save",
                     data: {
                         username_give: username,
                         password_give: password
@@ -205,7 +205,7 @@
                 $("#help-id").addClass("is-loading")  //아이디를 형식에 맞게 입력했으면
                 $.ajax({                              //DB에서 확인하려고함
                     type: "POST",                     //요청을 보냄
-                    url: "/sign_up/check_dup",
+                    url: "/login/sign_up/check_dup",
                     data: {
                         username_give: username
                     },
