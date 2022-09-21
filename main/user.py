@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, jsonify, Blueprint, redirect, url_for
 from pymongo import MongoClient
 import certifi
+from werkzeug.utils import secure_filename
 
 import jwt
 
