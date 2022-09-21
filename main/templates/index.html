@@ -22,11 +22,6 @@
         <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=cc1279bfac51f44586842831080632f7&libraries=services"></script>
 
 
-        <script>
-
-
-        </script>
-
         <style>
 
 
@@ -204,7 +199,7 @@
                                             <article class="media">
                                                 <div class="media-left">
                                                     <a class="image is-64x64" href="/user/${post['username']}">
-                                                        <img class="is-rounded" src="/static/${post['profile_pic_real']}"
+                                                        <img class="is-rounded" src="/main/static/${post['profile_pic_real']}"
                                                              alt="Image">
                                                     </a>
                                                 </div>
@@ -231,7 +226,7 @@
                                                         <div class="card">
                                                             <div class="card-image">
                                                                 <figure class="image is-4by3">
-                                                                    <img src="/static/${post['file']}
+                                                                    <img src="/main/static/${post['file']}
                                                                          alt="Placeholder image">
                                                                 </figure>
                                                         </div>
@@ -406,111 +401,11 @@
 
         <!--postlist 근데 post-box 부분 중복id 라고 뜨는 것 해결해야함ㅠ/밑에 똑같이 list들을 복사해서 나열해도 화면상 보이지 않음 get함수 때문인지 고민/ merge할때 삭제해야함-->
 
-                    <section class="section">
-                        <div id="post-box" class="container">
-                            <div class="box">
-                                <article class="media">
-                                    <div class="media-left">
-                                        <a class="image is-64x64" href="#">
-                                            <img class="is-rounded"
-                                                 src={{ url_for("static", filename="profile_pics/profile_placeholder.png") }}
-                                            alt="Image">
-                                        </a>
-                                    </div>
-                                    <div class="media-content">
-                                        <div class="content">
-                                            <p>
-                                                <strong>홍길동</strong> <small>@username</small> <small>10분 전</small>
-                                                <br>
-                                                글을 적는 칸
-                                            </p>
-                                        </div>
-                                        <nav class="level is-mobile">
-                                            <div class="level-left">
-                                                <a class="level-item is-sparta" aria-label="heart" onclick="toggle_like('', 'heart')">
-                                                    <span class="icon is-small"><i class="fa fa-heart" aria-hidden="true"></i></span>&nbsp;<span
-                                                        class="like-num">2.7k</span>
-                                                </a>
-                                            </div>
+        <section class="section">
+            <div id="post-box" class="container">
 
-                                        </nav>
-
-                                        <div class="card">
-                                        <div class="card-image">
-                                            <figure class="image is-4by3">
-                                                <img src="https://img-cf.kurly.com/shop/data/goodsview/20210803/gv20000208227_1.jpg"
-                                                     alt="Placeholder image">
-                                            </figure>
-                                        </div>
-
-                                    </div>
-
-                                    </div>
-
-
-                                </article>
-                            </div>
-
-                        </div>
-
-
-
-
-
-                    </section>
-                    <section class="section">
-                        <div id="post-box" class="container">
-                            <div class="box">
-                                <article class="media">
-                                    <div class="media-left">
-                                        <a class="image is-64x64" href="#">
-                                            <img class="is-rounded"
-                                                 src={{ url_for("static", filename="profile_pics/profile_placeholder.png") }}
-                                            alt="Image">
-                                        </a>
-                                    </div>
-                                    <div class="media-content">
-                                        <div class="content">
-                                            <p>
-                                                <strong>홍길동</strong> <small>@username</small> <small>10분 전</small>
-                                                <br>
-                                                글을 적는 칸
-                                            </p>
-                                        </div>
-                                        <nav class="level is-mobile">
-                                            <div class="level-left">
-                                                <a class="level-item is-sparta" aria-label="heart" onclick="toggle_like('', 'heart')">
-                                                    <span class="icon is-small"><i class="fa fa-heart" aria-hidden="true"></i></span>&nbsp;<span class="like-num">2.7k</span>
-                                                </a>
-                                            </div>
-
-                                        </nav>
-
-                                        <div class="card">
-                                        <div class="card-image">
-                                            <figure class="image is-4by3">
-                                                <img src="https://img-cf.kurly.com/shop/data/goodsview/20210803/gv20000208227_1.jpg"
-                                                     alt="Placeholder image">
-                                            </figure>
-                                        </div>
-
-                                    </div>
-
-                                    </div>
-
-
-                                </article>
-                            </div>
-
-                        </div>
-
-
-
-
-
-                    </section>
-
-
+            </div>
+        </section>
 
         <script>
             var infowindow = new kakao.maps.InfoWindow({zIndex:1});

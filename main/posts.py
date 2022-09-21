@@ -29,7 +29,7 @@ def posting():
     today = datetime.now()
     mytime = today.strftime('%Y-%m-%d-%H-%M-%S')
     filename = f'file-{mytime}'
-    save_to = f'static/{filename}.{extension}'
+    save_to = f'main/static/{filename}.{extension}'
     file.save(save_to)
 
     doc = {
