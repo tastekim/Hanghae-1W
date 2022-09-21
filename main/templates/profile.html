@@ -201,7 +201,7 @@
         $("#post-box").empty()
         $.ajax({
             type: "GET",
-            url: `/get_posts?username_give=${username}`,
+            url: `/list/get_posts?username_give=${username}`,
             data: {},
             success: function (response) {
                 if (response["result"] == "success") {
