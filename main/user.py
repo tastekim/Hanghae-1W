@@ -28,8 +28,6 @@ def user(username):
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
         return redirect(url_for("home"))
 
-<<<<<<< HEAD
-=======
 @bp_user.route('/update_profile', methods=['POST'])
 def save_img():
     token_receive = request.cookies.get('mytoken')
@@ -54,4 +52,4 @@ def save_img():
         return jsonify({"result": "success", 'msg': '프로필을 업데이트했습니다.'})
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
         return redirect(url_for("home"))
->>>>>>> bp
+
