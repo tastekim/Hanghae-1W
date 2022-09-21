@@ -1,4 +1,6 @@
 from flask import Flask, render_template, request, jsonify, Blueprint
+
+
 from datetime import datetime
 from pymongo import MongoClient
 import certifi
@@ -19,6 +21,7 @@ def posting():
     selectFood_receive = request.form["selectFood_give"]
     content_receive = request.form["content_give"]
     file = request.files["file_give"]
+    location_receive = request.form["location_give"]
 
     extension = file.filename.split('.')[-1]
 
@@ -31,7 +34,8 @@ def posting():
     doc = {
         'selectFood': selectFood_receive,
         'content':content_receive,
-        'file': f'{filename}.{extension}'
+        'file': f'{filename}.{extension}',
+        'location': location_receive
     }
     db.posts.insert_one(doc)
 
