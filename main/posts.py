@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, jsonify, Blueprint
-
+app = Flask(__name__)
 
 from datetime import datetime
 from pymongo import MongoClient
@@ -10,7 +10,10 @@ ca = certifi.where()
 client = MongoClient('mongodb://15.164.214.98', 27017, username="test", password="test")
 db = client.yoryjory
 
-bp_post = Blueprint("posts", __name__, url_prefix="/post", template_folder='templates')
+# client = MongoClient('mongodb+srv://test:sparta@cluster0.iilav5q.mongodb.net/?retryWrites=true&w=majority')
+
+
+bp_post = Blueprint("posts", __name__, url_prefix="/posts", template_folder='templates')
 
 @bp_post.route('/')
 def home():
