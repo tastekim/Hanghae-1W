@@ -1,31 +1,17 @@
-from pymongo import MongoClient
-import jwt
-import datetime
-import hashlib
-from flask import Flask, render_template, jsonify, request, redirect, url_for,Blueprint
-from werkzeug.utils import secure_filename
-from datetime import datetime, timedelta
+from main import *
+from flask import Blueprint, request
 import certifi
 
-
-
+bp_lists = Blueprint("lists", __name__, url_prefix="/list", template_folder='templates')
 
 # db 연결
 ca = certifi.where()
 client = MongoClient('mongodb://15.164.214.98', 27017, username="test", password="test")
 db = client.yoryjory
 
-bp_list = Blueprint("lists", __name__, url_prefix="/list", template_folder='templates')
-
-
-app = Flask(__name__)
-app.config["TEMPLATES_AUTO_RELOAD"] = True
-app.config['UPLOAD_FOLDER'] = "./static/profile_pics"
-
 SECRET_KEY = 'SPARTA'
 
-
-@bp_list.route('/')
+@bp_lists.route('/')
 def listpage():
     return render_template('index.html')
 
@@ -62,7 +48,7 @@ def listpage():
 
 
 
-@bp_list.route("/get_posts", methods=['GET'])
+@bp_lists.route("/get_posts", methods=['GET'])
 def get_posts():
     token_receive = request.cookies.get('mytoken')
     try:
@@ -78,7 +64,7 @@ def get_posts():
 
 
 
-@bp_list.route('/update_like', methods=['POST'])
+@bp_lists.route('/update_like', methods=['POST'])
 def update_like():
     token_receive = request.cookies.get('mytoken')
     try:
