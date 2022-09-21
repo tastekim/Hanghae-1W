@@ -1,10 +1,503 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
+    <head>
+
+        <!-- Webpage Title -->
+        <title>Home | SWEETER</title>
+
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <!-- Bulma CSS -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
+        <!-- Font Awesome CSS -->
+        <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+        <link href="{{ url_for('static', filename='mystyle.css') }}" rel="stylesheet">
+
+        <!-- JS -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+
+        <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=cc1279bfac51f44586842831080632f7&libraries=services"></script>
+
+
+        <style>
+
+
+            body {
+                background-color: rgb(255, 193, 7);
+                min-height: 100vh;
+                padding-top: 3.25rem;
+            }
+
+            .section {
+                padding: 1rem 1.5rem;
+                max-width: 750px;
+                margin: auto;
+            }
+
+            .is-sparta {
+                color: #e8344e !important;
+            }
+
+            .button.is-sparta {
+                background-color: #e8344e;
+                border-color: transparent;
+                color: #fff !important;
+            }
+
+            .button.is-sparta.is-outlined {
+                background-color: transparent;
+                border-color: #e8344e;
+                color: #e8344e !important;
+            }
+
+            .modal-content {
+                width: 600px;
+                max-width: 80%;
+            }
+
+            input::-webkit-calendar-picker-indicator {
+                display: none;
+            }
+
+            .image img {
+                object-fit: cover;
+                width: 100%;
+                height: 100%;
+            }
+            .tags{
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                justify-content: center;
+
+                margin: auto;
+            }
+
+            .tagsbox{
+                margin-bottom: 50px;
+            }
+
+            .landing {
+                text-align: center;
+                width: 50vw;
+                margin: auto;
+                padding-top: 50px;
+                padding-bottom: 50px;
+            }
+
+            .landing label {
+                text-align: left;
+            }
+
+            .landing textarea {
+                margin-bottom: 20px;
+            }
+
+            .landing .button-group .button:first-child {
+                margin-right: 5px;
+            }
+
+            #selectFood {
+                margin-bottom: 10px;
+            }
+
+            #location {
+                margin: auto auto 10px;
+
+            }
+            #location #map {
+                width:50vw;
+                height:400px;
+            }
+
+            #clickLatlng {
+                color: rgb(255, 193, 7);
+                font-size: large;
+            }
+
+        </style>
+        <script>
+            function posting() {
+                let selectFood = $('#selectFood').val()
+                let content = $("#landing-content").val()
+                let file = $('#input-pic')[0].files[0]
+                let location = document.getElementById('clickLatlng').innerText
+
+                console.log(selectFood, content, location, file)
+
+                let form_data = new FormData()
+
+                form_data.append("file_give", file)
+                form_data.append("selectFood_give", selectFood)
+                form_data.append("content_give", content)
+                form_data.append("location_give", location)
+
+                $.ajax({
+                    type: "POST",
+                    url: "/posts/posting",
+                    data: form_data,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    success: function (response) {
+                        alert(response["msg"])
+                        window.location.reload()
+                    }
+                });
+            }
+        </script>
+
+        <script>
+
+            <!--list에 입력되는 시간-->
+                function time2str(date) {
+                    let today = new Date()
+                    let time = (today - date) / 1000 / 60  // 분
+
+                    if (time < 60) {
+                        return parseInt(time) + "분 전"
+                    }
+                    time = time / 60  // 시간
+                    if (time < 24) {
+                        return parseInt(time) + "시간 전"
+                    }
+                    time = time / 24
+                    if (time < 7) {
+                        return parseInt(time) + "일 전"
+                    }
+                    return `${date.getFullYear()}년 ${date.getMonth() + 1}월 ${date.getDate()}일`
+                }
+
+
+                <!--list get 함수-->
+                function get_posts() {
+                    $("#post-box").empty()
+                    $.ajax({
+                        type: "GET",
+                        url: "/get_posts",
+                        data: {},
+                        success: function (response) {
+                            if (response["result"] == "success") {
+                                let posts = response["posts"]
+                                for (let i = 0; i < posts.length; i++) {
+                                    let post = posts[i]
+                                    let time_post = new Date(post["date"])
+                                    let time_before = time2str(time_post)
+                                    let class_heart = ""
+                                    if (post["heart_by_me"]) {
+                                        class_heart = "fa-heart"
+                                    } else {
+                                        class_heart = "fa-heart-o"
+                                    }
+
+                                    let count_heart=post['count_heart']
+
+                                    let html_temp = `<div class="box" id="${post["_id"]}">
+                                            <article class="media">
+                                                <div class="media-left">
+                                                    <a class="image is-64x64" href="/user/${post['username']}">
+                                                        <img class="is-rounded" src="/main/static/${post['profile_pic_real']}"
+                                                             alt="Image">
+                                                    </a>
+                                                </div>
+                                                <div class="media-content">
+                                                    <div class="content">
+
+                                                        <p>
+                                                            <small>@${post['username']}</small> <small>${time_before}</small>
+                                                            <br>
+                                                            <small>${post['location']}</small>  <small>${post['selectFood']}</small>
+                                                            <br>
+                                                            ${post['content']}
+                                                        </p>
+                                                    </div>
+                                                    <nav class="level is-mobile">
+                                                        <div class="level-left">
+                                                            <a class="level-item is-sparta" aria-label="heart" onclick="toggle_like('${post['_id']}', 'heart')">
+                                                                <span class="icon is-small"><i class="fa ${class_heart}"
+                                                                                               aria-hidden="true"></i></span>&nbsp;<span class="like-num">${count_heart}</span>
+                                                            </a>
+                                                        </div>
+
+                                                    </nav>
+                                                        <div class="card">
+                                                            <div class="card-image">
+                                                                <figure class="image is-4by3">
+                                                                    <img src="/main/static/${post['file']}
+                                                                         alt="Placeholder image">
+                                                                </figure>
+                                                        </div>
+
+
+                                                </div>
+                                            </article>
+                                        </div>`
+                                    $("#post-box").append(html_temp)
+                                }
+                            }
+                        }
+                    })
+                }
+            $(document).ready(function () {
+                get_posts()
+            })
+
+
+            function toggle_like(post_id, type) {
+                console.log(post_id, type)
+                let $a_like = $(`#${post_id} a[aria-label='heart']`)
+                let $i_like = $a_like.find("i")
+                if ($i_like.hasClass("fa-heart")) {
+                    $.ajax({
+                        type: "POST",
+                        url: "/update_like",
+                        data: {
+                            post_id_give: post_id,
+                            type_give: type,
+                            action_give: "unlike"
+                        },
+                        success: function (response) {
+                            console.log("unlike")
+                            $i_like.addClass("fa-heart-o").removeClass("fa-heart")
+                            $a_like.find("span.like-num").text(response["count"])
+                        }
+                    })
+                } else {
+                    $.ajax({
+                        type: "POST",
+                        url: "/update_like",
+                        data: {
+                            post_id_give: post_id,
+                            type_give: type,
+                            action_give: "like"
+                        },
+                        success: function (response) {
+                            console.log("like")
+                            $i_like.addClass("fa-heart").removeClass("fa-heart-o")
+                            $a_like.find("span.like-num").text(response["count"])
+                        }
+                    })
+
+                }
+            }
+
+
+
+
+
+
+        </script>
+
 </head>
+
 <body>
-<p>Hello, world.</p>
+
+        <!--로고 보여지는 곳 / 로고사진바꿔야함-->
+        <nav class="navbar is-fixed-top is-white" role="navigation" aria-label="main navigation">
+            <div class="navbar-brand">
+                <a class="navbar-item" href="/">
+                    <img src="{{ url_for('static', filename='logo.png') }}">
+                    <strong class="is-sparta"
+                            style="font-family: 'Stylish', sans-serif;font-size: larger;">YORYJORY</strong>
+                </a>
+            </div>
+        </nav>
+
+
+        <!--'오늘 뭐 드셨어요' 포스팅 세션 / href 와 src 프로필파일로 바꿀 수 있도록 변경함/ 오류확인필요-->
+                    <section class="section ">
+                        <article class="media">
+                            <figure class="media-left" style="align-self: center">
+                                <a class="image is-32x32" href="/user/{{ user_info.username }}">
+                                    <img class="is-rounded"
+                                         src="{{ url_for('static', filename=user_info.profile_pic_real) }}">
+                                </a>
+                            </figure>
+                            <div class="media-content">
+                                <div class="field">
+                                    <p class="control">
+                                          <input id="input-post" class="input is-rounded " placeholder="오늘 뭐 드셨나요?"
+                                                 onclick='$("#modal-post").addClass("is-active")'>                </p>
+                                </div>
+                            </div>
+                        </article>
+
+                    </section>
+
+
+        <!--태그-->
+                    <section>
+                        <div class="tags">
+                            <div class="tags are-large ">
+                                <span class="tag is-warning is-light is-rounded ">한식</span>
+                                <span class="tag is-warning is-light is-rounded ">중식</span>
+                                <span class="tag is-warning is-light is-rounded ">일식</span>
+                                <span class="tag is-warning is-light is-rounded ">양식</span>
+                                <span class="tag is-warning is-light is-rounded ">아시안</span>
+                                <span class="tag is-warning is-light is-rounded ">기타</span>
+                            </div>
+                        </div>
+                    </section>
+
+        <!--modal 포스팅박스 -->
+                    <div class="modal" id="modal-post">
+                        <div class="modal-background" onclick='$("#modal-post").removeClass("is-active")'></div>
+                        <div class="modal-content">
+                            <div class="box">
+                             <div class="landing">
+        <label for="selectFood" class="label">음식 종류</label>
+       <div class="select is-fullwidth" >
+        <select id="selectFood">
+            <option>선택</option>
+            <option>한식</option>
+            <option>중식</option>
+            <option>양식</option>
+            <option>일식</option>
+            <option>아시안</option>
+            <option>디저트</option>
+            <option>기타</option>
+        </select>
+        </div>
+        <label for="location" class="label">위치</label>
+        <button type="button" class="button is-normal is-success is-light" onclick="currentLocation()">현재 위치 추가하기</button>
+        <p>현재 위치는</p>
+        <p id="clickLatlng">-</p>
+        <p>이시군요!</p>
+        <div class="" id="location">
+            <div id="map"></div>
+        </div>
+        <div id="file-with-js"
+             class="file has-name is-expanded">
+            <label class="file-label" style="width:100%">
+                <input class="file-input"
+                       type="file" name="selected-image" id="input-pic">
+                <span class="file-cta">
+                    <span class="file-label">
+                        파일 선택
+                    </span>
+                </span>
+                <span class="file-name" style="width: 100%; max-width: 100%">
+                   음식 사진 첨부하기 🍽
+                </span>
+            </label>
+        </div>
+        <label for="landing-content" class="label">글 내용</label>
+        <textarea class="textarea" placeholder="내용을 입력하세요" rows="10" id="landing-content"></textarea>
+        <div class="button-group">
+            <button type="button" class="button is-normal is-success is-light" onclick="posting()">등록</button>
+            <button type="button" class="button is-light is-normal ">취소</button>
+        </div>
+    </div>
+
+                            </div>
+                        </div>
+                        <button class="modal-close is-large" aria-label="close"
+                                onclick='$("#modal-post").removeClass("is-active")'></button>
+                    </div>
+
+
+        <!--postlist 근데 post-box 부분 중복id 라고 뜨는 것 해결해야함ㅠ/밑에 똑같이 list들을 복사해서 나열해도 화면상 보이지 않음 get함수 때문인지 고민/ merge할때 삭제해야함-->
+
+        <section class="section">
+            <div id="post-box" class="container">
+
+            </div>
+        </section>
+
+        <script>
+            var infowindow = new kakao.maps.InfoWindow({zIndex:1});
+
+            let container = document.getElementById('map'); //지도를 담을 영역의 DOM 레퍼런스
+            let options = { //지도를 생성할 때 필요한 기본 옵션
+                center: new kakao.maps.LatLng(37.536289, 126.988959), //지도의 중심좌표.
+                level: 7 //지도의 레벨(확대, 축소 정도)
+            };
+
+            let map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
+            let currentLocation = () => {
+                if (navigator.geolocation) {
+
+                    // GeoLocation을 이용해서 접속 위치를 얻어옵니다
+                    navigator.geolocation.getCurrentPosition(function (position) {
+
+                        var lat = position.coords.latitude, // 위도
+                            lon = position.coords.longitude; // 경도
+
+                        var locPosition = new kakao.maps.LatLng(lat, lon), // 마커가 표시될 위치를 geolocation으로 얻어온 좌표로 생성합니다
+                            message = '<div class="infoMessage">맛있는 식사중 😋</div>'; // 인포윈도우에 표시될 내용입니다
+
+                        // 마커와 인포윈도우를 표시합니다
+                        displayMarker(locPosition, message);
+
+                        // 주소-좌표 변환 객체를 생성합니다
+                        //var geocoder = new kakao.maps.services.Geocoder();
+                        getAddr(lat, lon);
+                        function getAddr(lat, lng) {
+                            let geocoder = new kakao.maps.services.Geocoder();
+                            let coord = new kakao.maps.LatLng(lat, lng);
+                            let callback = function (result, status) {
+                                if (status === kakao.maps.services.Status.OK) {
+                                    let dho = result[0]['address']['region_1depth_name'];
+                                    let shi = result[0]['address']['region_2depth_name'];
+                                    let dong =result[0]['address']['region_3depth_name'];
+                                    console.log(dho,shi,dong)
+
+                                    let resultDiv = document.getElementById('clickLatlng');
+                                    resultDiv.innerHTML = `${dho} ${shi} ${dong}`;
+                                }
+                            };
+                            geocoder.coord2Address(coord.getLng(), coord.getLat(), callback);
+                        }
+                    });
+                } else { // HTML5의 GeoLocation을 사용할 수 없을때 마커 표시 위치와 인포윈도우 내용을 설정합니다
+                    var locPosition = new kakao.maps.LatLng(37.521889, 126.982764),
+                        message = 'geolocation을 사용할수 없어요..'
+                    displayMarker(locPosition, message);
+                }
+                // 지도에 마커와 인포윈도우를 표시하는 함수입니다
+                function displayMarker(locPosition, message) {
+                    // 마커를 생성합니다
+                    var marker = new kakao.maps.Marker({
+                        map: map,
+                        position: locPosition
+                    });
+                    var iwContent = message, // 인포윈도우에 표시할 내용
+                        iwRemoveable = true;
+                    // 인포윈도우를 생성합니다
+                    var infowindow = new kakao.maps.InfoWindow({
+                        content: iwContent,
+                        removable: iwRemoveable
+                    });
+                    // 인포윈도우를 마커위에 표시합니다
+                    infowindow.open(map, marker);
+                    // 지도 중심좌표를 접속위치로 변경합니다
+                    map.setCenter(locPosition);
+                }
+            }
+        </script>
+        <script>
+            // Select the input element using
+            // document.querySelector
+            var input = document.querySelector(
+                "#file-with-js>.file-label>.file-input"
+            );
+            console.log(input)
+            // Bind an listener to onChange event of the input
+            input.onchange = function () {
+                if (input.files.length > 0) {
+                    var fileNameContainer =
+                        document.querySelector(
+                            "#file-with-js>.file-label>.file-name"
+                        );
+                    // set the inner text of fileNameContainer
+                    // to the name of the file
+                    fileNameContainer.textContent =
+                        input.files[0].name;
+                }
+            }
+        </script>
 </body>
-</html>
+
