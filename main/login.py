@@ -28,7 +28,7 @@ def sign_in():
     if result is not None:
         payload = {
          'id': username_receive,
-         'exp': datetime.utcnow() + timedelta(seconds=60 * 10)  # 로그인 10분 유지
+         'exp': datetime.utcnow() + timedelta(seconds=60 * 30)  # 로그인 30분 유지
         }
         token = jwt.encode(payload, SECRET_KEY, algorithm='HS256').decode('utf-8')
                                                         #decode('utf-8')오류가 나서 지움

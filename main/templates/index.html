@@ -3,7 +3,7 @@
     <head>
 
         <!-- Webpage Title -->
-        <title>Home | SWEETER</title>
+        <title>요리조리</title>
 
         <!-- Required meta tags -->
         <meta charset="utf-8">
@@ -177,7 +177,7 @@
                     $("#post-box").empty()
                     $.ajax({
                         type: "GET",
-                        url: "/get_posts",
+                        url: "/list/get_posts",
                         data: {},
                         success: function (response) {
                             if (response["result"] == "success") {
@@ -192,7 +192,7 @@
                                     } else {
                                         class_heart = "fa-heart-o"
                                     }
-
+                                    let file = posts[i]['file']
                                     let count_heart=post['count_heart']
 
                                     let html_temp = `<div class="box" id="${post["_id"]}">
@@ -226,7 +226,7 @@
                                                         <div class="card">
                                                             <div class="card-image">
                                                                 <figure class="image is-4by3">
-                                                                    <img src="/main/static/${post['file']}
+                                                                    <img src="../static/${file}"}
                                                                          alt="Placeholder image">
                                                                 </figure>
                                                         </div>
@@ -253,7 +253,7 @@
                 if ($i_like.hasClass("fa-heart")) {
                     $.ajax({
                         type: "POST",
-                        url: "/update_like",
+                        url: "/list/update_like",
                         data: {
                             post_id_give: post_id,
                             type_give: type,
@@ -268,7 +268,7 @@
                 } else {
                     $.ajax({
                         type: "POST",
-                        url: "/update_like",
+                        url: "/list/update_like",
                         data: {
                             post_id_give: post_id,
                             type_give: type,
@@ -320,7 +320,8 @@
                                 <div class="field">
                                     <p class="control">
                                           <input id="input-post" class="input is-rounded " placeholder="오늘 뭐 드셨나요?"
-                                                 onclick='$("#modal-post").addClass("is-active")'>                </p>
+                                                 onclick='$("#modal-post").addClass("is-active")'>
+                                    </p>
                                 </div>
                             </div>
                         </article>
