@@ -27,7 +27,23 @@ SECRET_KEY = 'SPARTA'
 
 @bp_list.route('/')
 def listpage():
-    return render_template('lists.html')
+    return render_template('index.html')
+
+# post 쪽에서 이걸 받아와야함 승훈님이 보내주신 것에는 id/username/date/프로필사진이 없으니까 이걸 받아와야할 함수?가 필요
+# user_info = db.users.find_one({"username": payload["id"]})
+# comment_receive = request.form["comment_give"]
+# date_receive = request.form["date_give"]
+# doc = {
+#     "username": user_info["username"],
+#     "profile_name": user_info["profile_name"],
+#     "profile_pic_real": user_info["profile_pic_real"],
+#     "comment": comment_receive,
+#     "date": date_receive
+# }
+# db.posts.insert_one(doc)
+
+
+
 
 @bp_list.route("/get_posts", methods=['GET'])
 def get_posts():
