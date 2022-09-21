@@ -120,6 +120,15 @@
                                     let post = posts[i]
                                     let time_post = new Date(post["date"])
                                     let time_before = time2str(time_post)
+                                    let class_heart = ""
+                                    if (post["heart_by_me"]) {
+                                        class_heart = "fa-heart"
+                                    } else {
+                                        class_heart = "fa-heart-o"
+                                    }
+
+                                    let count_heart=post['count_heart']
+
                                     let html_temp = `<div class="box" id="${post["_id"]}">
                                             <article class="media">
                                                 <div class="media-left">
@@ -142,8 +151,8 @@
                                                     <nav class="level is-mobile">
                                                         <div class="level-left">
                                                             <a class="level-item is-sparta" aria-label="heart" onclick="toggle_like('${post['_id']}', 'heart')">
-                                                                <span class="icon is-small"><i class="fa fa-heart"
-                                                                                               aria-hidden="true"></i></span>&nbsp;<span class="like-num">2.7k</span>
+                                                                <span class="icon is-small"><i class="fa ${class_heart}"
+                                                                                               aria-hidden="true"></i></span>&nbsp;<span class="like-num">${count_heart}</span>
                                                             </a>
                                                         </div>
 
@@ -169,6 +178,51 @@
             $(document).ready(function () {
                 get_posts()
             })
+
+
+            function toggle_like(post_id, type) {
+                console.log(post_id, type)
+                let $a_like = $(`#${post_id} a[aria-label='heart']`)
+                let $i_like = $a_like.find("i")
+                if ($i_like.hasClass("fa-heart")) {
+                    $.ajax({
+                        type: "POST",
+                        url: "/update_like",
+                        data: {
+                            post_id_give: post_id,
+                            type_give: type,
+                            action_give: "unlike"
+                        },
+                        success: function (response) {
+                            console.log("unlike")
+                            $i_like.addClass("fa-heart-o").removeClass("fa-heart")
+                            $a_like.find("span.like-num").text(response["count"])
+                        }
+                    })
+                } else {
+                    $.ajax({
+                        type: "POST",
+                        url: "/update_like",
+                        data: {
+                            post_id_give: post_id,
+                            type_give: type,
+                            action_give: "like"
+                        },
+                        success: function (response) {
+                            console.log("like")
+                            $i_like.addClass("fa-heart").removeClass("fa-heart-o")
+                            $a_like.find("span.like-num").text(response["count"])
+                        }
+                    })
+
+                }
+            }
+
+
+
+
+
+
         </script>
 
 </head>
@@ -181,18 +235,19 @@
                 <a class="navbar-item" href="/">
                     <img src="{{ url_for('static', filename='logo.png') }}">
                     <strong class="is-sparta"
-                            style="font-family: 'Stylish', sans-serif;font-size: larger;">SWEETER</strong>
+                            style="font-family: 'Stylish', sans-serif;font-size: larger;">YORYJORY</strong>
                 </a>
             </div>
         </nav>
 
 
-        <!--'오늘 뭐 드셨어요' 포스팅 세션 / href 와 src 프로필파일로 바꿀 수 있도록 변경해야함-->
+        <!--'오늘 뭐 드셨어요' 포스팅 세션 / href 와 src 프로필파일로 바꿀 수 있도록 변경함/ 오류확인필요-->
                     <section class="section ">
                         <article class="media">
                             <figure class="media-left" style="align-self: center">
-                                <a class="image is-32x32" href="#">
-                                    <img class="is-rounded" src="{{ url_for("static", filename="profile_pics/profile_placeholder.png") }}">
+                                <a class="image is-32x32" href="/user/{{ user_info.username }}">
+                                    <img class="is-rounded"
+                                         src="{{ url_for('static', filename=user_info.profile_pic_real) }}">
                                 </a>
                             </figure>
                             <div class="media-content">
@@ -262,7 +317,7 @@
                     </div>
 
 
-        <!--postlist 근데 post-box 부분 중복id 라고 뜨는 것 해결해야함ㅠ/밑에 똑같이 list들을 복사해서 나열해도 화면상 보이지 않음 get함수 때문인지 고민-->
+        <!--postlist 근데 post-box 부분 중복id 라고 뜨는 것 해결해야함ㅠ/밑에 똑같이 list들을 복사해서 나열해도 화면상 보이지 않음 get함수 때문인지 고민/ merge할때 삭제해야함-->
 
                     <section class="section">
                         <div id="post-box" class="container">
@@ -338,8 +393,7 @@
                                         <nav class="level is-mobile">
                                             <div class="level-left">
                                                 <a class="level-item is-sparta" aria-label="heart" onclick="toggle_like('', 'heart')">
-                                                    <span class="icon is-small"><i class="fa fa-heart" aria-hidden="true"></i></span>&nbsp;<span
-                                                        class="like-num">2.7k</span>
+                                                    <span class="icon is-small"><i class="fa fa-heart" aria-hidden="true"></i></span>&nbsp;<span class="like-num">2.7k</span>
                                                 </a>
                                             </div>
 
