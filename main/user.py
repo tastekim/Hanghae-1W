@@ -5,6 +5,8 @@ from werkzeug.utils import secure_filename
 
 import jwt
 
+import jwt
+
 # db 연결
 ca = certifi.where()
 client = MongoClient('mongodb://15.164.214.98', 27017, username="test", password="test")
@@ -50,3 +52,4 @@ def save_img():
         return jsonify({"result": "success", 'msg': '프로필을 업데이트했습니다.'})
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
         return redirect(url_for("home"))
+

@@ -200,6 +200,7 @@
                                         class_heart = "fa-heart-o"
                                     }
                                     let file = posts[i]['file']
+
                                     let count_heart=post['count_heart']
 
 
@@ -207,7 +208,9 @@
                                             <article class="media">
                                                 <div class="media-left">
                                                     <a class="image is-64x64" href="/user/${post['username']}">
+
                                                         <img class="is-rounded" src="../static/${post['profile_pic_real']}"
+
                                                              alt="Image">
                                                     </a>
                                                 </div>
@@ -234,8 +237,8 @@
                                                         <div class="card">
                                                             <div class="card-image">
                                                                 <figure class="image is-4by3">
-                                                                    <img src= "../static/${file}">
 
+                                                                    <img src= "../static/${file}">
 
                                                                 </figure>
                                                         </div>
@@ -254,6 +257,78 @@
                 get_posts()
             })
 
+            function get_select_posts() {
+                    $("#post-box").empty()
+                    $.ajax({
+                        type: "GET",
+                        url: "/list/select_food",
+                        data: {},
+                        success: function (response) {
+                            if (response["result"] == "success") {
+                                let posts = response["posts"]
+                                for (let i = 0; i < posts.length; i++) {
+                                    let post = posts[i]
+                                    let time_post = new Date(post["date"])
+                                    let time_before = time2str(time_post)
+                                    let class_heart = ""
+                                    if (post["heart_by_me"]) {
+                                        class_heart = "fa-heart"
+                                    } else {
+                                        class_heart = "fa-heart-o"
+                                    }
+
+                                    let count_heart=post['count_heart']
+
+                                    let html_temp = `<div class="box" id="${post["_id"]}">
+                                            <article class="media">
+                                                <div class="media-left">
+                                                    <a class="image is-64x64" href="/user/${post['username']}">
+                                                        <img class="is-rounded" src="{{ url_for('static', filename=user_info.profile_pic_real) }}"
+                                                             alt="Image">
+                                                    </a>
+                                                </div>
+                                                <div class="media-content">
+                                                    <div class="content">
+
+                                                        <p>
+                                                            <small>@${post['username']}</small> <small>${time_before}</small>
+                                                            <br>
+                                                            <small>${post['location']}</small>  <small>${post['selectFood']}</small>
+                                                            <br>
+                                                            ${post['content']}
+                                                        </p>
+                                                    </div>
+                                                    <nav class="level is-mobile">
+                                                        <div class="level-left">
+                                                            <a class="level-item is-sparta" aria-label="heart" onclick="toggle_like('${post['_id']}', 'heart')">
+                                                                <span class="icon is-small"><i class="fa ${class_heart}"
+                                                                                               aria-hidden="true"></i></span>&nbsp;<span class="like-num">${count_heart}</span>
+                                                            </a>
+                                                        </div>
+
+                                                    </nav>
+                                                        <div class="card">
+                                                            <div class="card-image">
+                                                                <figure class="image is-4by3">
+                                                                    <img src="{{ url_for('static', filename=user_info.file) }}"
+                                                                         alt="Placeholder image">
+                                                                </figure>
+                                                        </div>
+
+
+                                                </div>
+                                            </article>
+                                        </div>`
+                                    $("#post-box").append(html_temp)
+                                }
+                            }
+                        }
+                    })
+                }
+            $(document).ready(function () {
+                get_select_posts();
+            })
+
 
             function toggle_like(post_id, type) {
                 console.log(post_id, type)
@@ -262,7 +337,9 @@
                 if ($i_like.hasClass("fa-heart")) {
                     $.ajax({
                         type: "POST",
+
                         url: "list/update_like",
+
                         data: {
                             post_id_give: post_id,
                             type_give: type,
@@ -277,7 +354,9 @@
                 } else {
                     $.ajax({
                         type: "POST",
+
                         url: "list/update_like",
+
                         data: {
                             post_id_give: post_id,
                             type_give: type,
@@ -294,10 +373,6 @@
             }
 
 
-
-
-
-
         </script>
 
 </head>
@@ -309,8 +384,7 @@
             <div class="navbar-brand">
                 <a class="navbar-item" href="/">
                     <img src="{{ url_for('static', filename='logo.png') }}">
-                    <strong class="is-sparta"
-                            style="font-family: 'Stylish', sans-serif;font-size: larger;">YORYJORY</strong>
+
                 </a>
             </div>
         </nav>
@@ -347,7 +421,6 @@
                                 <span class="tag is-warning is-light is-rounded ">양식</span>
                                 <span class="tag is-warning is-light is-rounded ">아시안</span>
                                 <span class="tag is-warning is-light is-rounded ">기타</span>
-
                             </div>
                         </div>
                     </section>
@@ -510,6 +583,8 @@
                         input.files[0].name;
                 }
             }
+
+
         </script>
 </body>
 

@@ -46,6 +46,19 @@ def listpage():
 # db.posts.insert_one(doc)
 
 
+@bp_lists.route("/select_food/<selectfood>", methods=['GET'])
+def get_selectfood(selectfood):
+    token_receive = request.cookies.get('mytoken')
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        posts = list(db.posts.find({"selectFood" : selectfood}).sort("date", -1).limit(20))
+        for post in posts:
+            post["_id"] = str(post["_id"])
+            post["count_heart"] = db.likes.count_documents({"post_id": post["_id"], "type": "heart"})
+            post["heart_by_me"] = bool(db.likes.find_one({"post_id": post["_id"], "type": "heart", "username": payload['id']}))
+        return jsonify({"result": "success", "msg": "포스팅을 가져왔습니다.","posts":posts})
+    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+        return redirect(url_for("home"))
 
 
 @bp_lists.route("/get_posts", methods=['GET'])
