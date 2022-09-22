@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>요리조리</title>
+        <link rel="shortcut icon" href="../static/yoryjory_pic_un.png" type="image/x-icon">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <!-- Bulma CSS 링크 -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+                integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+                crossorigin="anonymous"></script>
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
+
+        <style>
+            * {
+                box-sizing: border-box;
+                margin: 0;
+                font-family: 'Jua', sans-serif;
+            }
+
+            .landing {
+                text-align: center;
+                width: 50vw;
+                margin: auto;
+                padding-top: 50px;
+                padding-bottom: 50px;
+            }
+
+            .landing label {
+                text-align: left;
+            }
+
+            .landing textarea {
+                margin-bottom: 20px;
+            }
+
+            .landing .button-group .button:first-child {
+                margin-right: 5px;
+            }
+
+            #selectFood {
+                margin-bottom: 10px;
+            }
+
+            #location {
+                margin: auto auto 10px;
+
+            }
+            #location #map {
+                width:50vw;
+                height:400px;
+            }
+
+            #clickLatlng {
+                color: rgb(255, 193, 7);
+                font-size: large;
+            }
+
+        </style>
+        <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=cc1279bfac51f44586842831080632f7&libraries=services"></script>
+        <script>
+            function posting() {
+                let selectFood = $('#selectFood').val()
+                let content = $("#landing-content").val()
+                let file = $('#input-pic')[0].files[0]
+                let location = document.getElementById('clickLatlng').innerText
+
+                console.log(selectFood, content, location, file)
+
+                let form_data = new FormData()
+
+                form_data.append("file_give", file)
+                form_data.append("selectFood_give", selectFood)
+                form_data.append("content_give", content)
+                form_data.append("location_give", location)
+
+                $.ajax({
+                    type: "POST",
+                    url: "/posts/posting",
+                    data: form_data,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    success: function (response) {
+                        alert(response["msg"])
+                        window.location.reload()
+                    }
+                });
+            }
+        </script>
+
+    </head>
+
+<body>
+    <div class="landing">
+        <label for="selectFood" class="label">음식 종류</label>
+       <div class="select is-fullwidth" >
+        <select id="selectFood">
+            <option>선택</option>
+            <option>한식</option>
+            <option>중식</option>
+            <option>양식</option>
+            <option>일식</option>
+            <option>아시안</option>
+            <option>디저트</option>
+            <option>기타</option>
+        </select>
+        </div>
+        <label for="location" class="label">위치</label>
+        <button type="button" class="button is-normal is-success is-light" onclick="currentLocation()">현재 위치 추가하기</button>
+        <p>현재 위치는</p>
+        <p id="clickLatlng">-</p>
+        <p>이시군요!</p>
+        <div class="" id="location">
+            <div id="map"></div>
+        </div>
+        <div id="file-with-js"
+             class="file has-name is-expanded">
+            <label class="file-label" style="width:100%">
+                <input class="file-input"
+                       type="file" name="selected-image" id="input-pic">
+                <span class="file-cta">
+                    <span class="file-label">
+                        파일 선택
+                    </span>
+                </span>
+                <span class="file-name" style="width: 100%; max-width: 100%">
+                   음식 사진 첨부하기 🍽
+                </span>
+            </label>
+        </div>
+        <label for="landing-content" class="label">글 내용</label>
+        <textarea class="textarea" placeholder="내용을 입력하세요" rows="10" id="landing-content"></textarea>
+        <div class="button-group">
+            <button type="button" class="button is-normal is-success is-light" onclick="posting()">등록</button>
+            <button type="button" class="button is-light is-normal ">취소</button>
+        </div>
+    </div>
+        <script>
+            var infowindow = new kakao.maps.InfoWindow({zIndex:1});
+
+            let container = document.getElementById('map'); //지도를 담을 영역의 DOM 레퍼런스
+            let options = { //지도를 생성할 때 필요한 기본 옵션
+                center: new kakao.maps.LatLng(37.536289, 126.988959), //지도의 중심좌표.
+                level: 7 //지도의 레벨(확대, 축소 정도)
+            };
+
+            let map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
+            let currentLocation = () => {
+                if (navigator.geolocation) {
+
+                    // GeoLocation을 이용해서 접속 위치를 얻어옵니다
+                    navigator.geolocation.getCurrentPosition(function (position) {
+
+                        var lat = position.coords.latitude, // 위도
+                            lon = position.coords.longitude; // 경도
+
+                        var locPosition = new kakao.maps.LatLng(lat, lon), // 마커가 표시될 위치를 geolocation으로 얻어온 좌표로 생성합니다
+                            message = '<div class="infoMessage">맛있는 식사중 😋</div>'; // 인포윈도우에 표시될 내용입니다
+
+                        // 마커와 인포윈도우를 표시합니다
+                        displayMarker(locPosition, message);
+
+                        // 주소-좌표 변환 객체를 생성합니다
+                        //var geocoder = new kakao.maps.services.Geocoder();
+                        getAddr(lat, lon);
+                        function getAddr(lat, lng) {
+                            let geocoder = new kakao.maps.services.Geocoder();
+                            let coord = new kakao.maps.LatLng(lat, lng);
+                            let callback = function (result, status) {
+                                if (status === kakao.maps.services.Status.OK) {
+                                    let dho = result[0]['address']['region_1depth_name'];
+                                    let shi = result[0]['address']['region_2depth_name'];
+                                    let dong =result[0]['address']['region_3depth_name'];
+                                    console.log(dho,shi,dong)
+
+                                    let resultDiv = document.getElementById('clickLatlng');
+                                    resultDiv.innerHTML = `${dho} ${shi} ${dong}`;
+                                }
+                            };
+                            geocoder.coord2Address(coord.getLng(), coord.getLat(), callback);
+                        }
+                    });
+                } else { // HTML5의 GeoLocation을 사용할 수 없을때 마커 표시 위치와 인포윈도우 내용을 설정합니다
+                    var locPosition = new kakao.maps.LatLng(37.521889, 126.982764),
+                        message = 'geolocation을 사용할수 없어요..'
+                    displayMarker(locPosition, message);
+                }
+                // 지도에 마커와 인포윈도우를 표시하는 함수입니다
+                function displayMarker(locPosition, message) {
+                    // 마커를 생성합니다
+                    var marker = new kakao.maps.Marker({
+                        map: map,
+                        position: locPosition
+                    });
+                    var iwContent = message, // 인포윈도우에 표시할 내용
+                        iwRemoveable = true;
+                    // 인포윈도우를 생성합니다
+                    var infowindow = new kakao.maps.InfoWindow({
+                        content: iwContent,
+                        removable: iwRemoveable
+                    });
+                    // 인포윈도우를 마커위에 표시합니다
+                    infowindow.open(map, marker);
+                    // 지도 중심좌표를 접속위치로 변경합니다
+                    map.setCenter(locPosition);
+                }
+            }
+        </script>
+        <script>
+            // Select the input element using
+            // document.querySelector
+            var input = document.querySelector(
+                "#file-with-js>.file-label>.file-input"
+            );
+            console.log(input)
+            // Bind an listener to onChange event of the input
+            input.onchange = function () {
+                if (input.files.length > 0) {
+                    var fileNameContainer =
+                        document.querySelector(
+                            "#file-with-js>.file-label>.file-name"
+                        );
+                    // set the inner text of fileNameContainer
+                    // to the name of the file
+                    fileNameContainer.textContent =
+                        input.files[0].name;
+                }
+            }
+        </script>
+</body>
+</html>

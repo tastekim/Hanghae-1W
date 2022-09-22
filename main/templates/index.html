@@ -3,7 +3,12 @@
     <head>
 
         <!-- Webpage Title -->
+<<<<<<< HEAD
         <title>Home | YORYJORY</title>
+=======
+        <title>요리조리</title>
+        <link rel="shortcut icon" href="../static/yoryjory_pic_un.png" type="image/x-icon">
+>>>>>>> 9540bfb46c6c12636a8e2256e060e4455adc9c56
 
         <!-- Required meta tags -->
         <meta charset="utf-8">
@@ -190,6 +195,7 @@
                     $.ajax({
                         type: "GET",
                         url: "/list/get_posts",
+<<<<<<< HEAD
                         data: {},
                         success: function (response) {
                             if (response["result"] == "success") {
@@ -283,7 +289,7 @@
                                     } else {
                                         class_heart = "fa-heart-o"
                                     }
-
+                                    let file = posts[i]['file']
                                     let count_heart=post['count_heart']
                                     let file = posts[i]['file']
                                     let html_temp = `<div class="box" id="${post["_id"]}">
@@ -317,7 +323,11 @@
                                                         <div class="card">
                                                             <div class="card-image">
                                                                 <figure class="image is-4by3">
+<<<<<<< HEAD
                                                                     <img src="{{ url_for('static', filename=user_info.file) }}"
+=======
+                                                                    <img src="../static/${file}"}
+>>>>>>> 9540bfb46c6c12636a8e2256e060e4455adc9c56
                                                                          alt="Placeholder image">
                                                                 </figure>
                                                         </div>
@@ -361,9 +371,13 @@
                 } else {
                     $.ajax({
                         type: "POST",
+<<<<<<< HEAD
 
                         url: "list/update_like",
 
+=======
+                        url: "/list/update_like",
+>>>>>>> 9540bfb46c6c12636a8e2256e060e4455adc9c56
                         data: {
                             post_id_give: post_id,
                             type_give: type,
@@ -430,8 +444,14 @@
                             <div class="media-content">
                                 <div class="field">
                                     <p class="control">
+<<<<<<< HEAD
                                           <input id="input-post" class="input is-rounded " placeholder="오늘 무엇을 드셨나요?🤗"
                                                  onclick='$("#modal-post").addClass("is-active")'>                </p>
+=======
+                                          <input id="input-post" class="input is-rounded " placeholder="오늘 뭐 드셨나요?"
+                                                 onclick='$("#modal-post").addClass("is-active")'>
+                                    </p>
+>>>>>>> 9540bfb46c6c12636a8e2256e060e4455adc9c56
                                 </div>
                             </div>
                         </article>

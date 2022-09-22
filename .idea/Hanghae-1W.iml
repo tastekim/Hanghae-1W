@@ -5,10 +5,14 @@
       <excludeFolder url="file://$MODULE_DIR$/venv" />
     </content>
 <<<<<<< HEAD
+<<<<<<< HEAD
     <orderEntry type="jdk" jdkName="Python 3.8" jdkType="Python SDK" />
 =======
     <orderEntry type="jdk" jdkName="Python 3.8 (1_Yoryjory)" jdkType="Python SDK" />
 >>>>>>> 3d08dcab1e0ecf7c59014d8b7fbbcd9694ac4036
+=======
+    <orderEntry type="jdk" jdkName="Python 3.8 (1_Yoryjory)" jdkType="Python SDK" />
+>>>>>>> 9540bfb46c6c12636a8e2256e060e4455adc9c56
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
   <component name="TemplatesService">
