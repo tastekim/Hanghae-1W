@@ -11,10 +11,6 @@ SECRET_KEY = 'SPARTA'
 
 bp_post = Blueprint("posts", __name__, url_prefix="/posts", template_folder='templates')
 
-@bp_post.route('/')
-def home():
-    return render_template('posting.html')
-
 @bp_post.route('/posting', methods=['POST'])
 def posting():
     selectFood_receive = request.form["selectFood_give"]
