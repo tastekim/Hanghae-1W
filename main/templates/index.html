@@ -82,7 +82,7 @@
 
             .landing {
                 text-align: center;
-                width: 50vw;
+
                 margin: auto;
                 padding-top: 50px;
                 padding-bottom: 50px;
@@ -109,8 +109,8 @@
 
             }
             #location #map {
-                width:50vw;
-                height:400px;
+                width:100%;
+                height:200px;
             }
 
             #clickLatlng {
@@ -121,6 +121,7 @@
         </style>
         <script>
             function posting() {
+                let today = new Date().toISOString()
                 let selectFood = $('#selectFood').val()
                 let content = $("#landing-content").val()
                 let file = $('#input-pic')[0].files[0]
@@ -134,6 +135,7 @@
                 form_data.append("selectFood_give", selectFood)
                 form_data.append("content_give", content)
                 form_data.append("location_give", location)
+                form_data.append("date_give", today)
 
                 $.ajax({
                     type: "POST",
@@ -173,16 +175,21 @@
 
 
                 <!--list get 함수-->
-                function get_posts() {
+                function get_posts(username) {
+                    if (username==undefined) {
+                        username=""
+                    }
                     $("#post-box").empty()
                     $.ajax({
                         type: "GET",
-                        url: "/get_posts",
+                        url: "/list/get_posts",
                         data: {},
                         success: function (response) {
                             if (response["result"] == "success") {
                                 let posts = response["posts"]
+                                console.log(posts)
                                 for (let i = 0; i < posts.length; i++) {
+
                                     let post = posts[i]
                                     let time_post = new Date(post["date"])
                                     let time_before = time2str(time_post)
@@ -192,14 +199,15 @@
                                     } else {
                                         class_heart = "fa-heart-o"
                                     }
-
+                                    let file = posts[i]['file']
                                     let count_heart=post['count_heart']
+
 
                                     let html_temp = `<div class="box" id="${post["_id"]}">
                                             <article class="media">
                                                 <div class="media-left">
                                                     <a class="image is-64x64" href="/user/${post['username']}">
-                                                        <img class="is-rounded" src="/main/static/${post['profile_pic_real']}"
+                                                        <img class="is-rounded" src="../static/${post['profile_pic_real']}"
                                                              alt="Image">
                                                     </a>
                                                 </div>
@@ -226,8 +234,9 @@
                                                         <div class="card">
                                                             <div class="card-image">
                                                                 <figure class="image is-4by3">
-                                                                    <img src="/main/static/${post['file']}
-                                                                         alt="Placeholder image">
+                                                                    <img src= "../static/${file}">
+
+
                                                                 </figure>
                                                         </div>
 
@@ -253,7 +262,7 @@
                 if ($i_like.hasClass("fa-heart")) {
                     $.ajax({
                         type: "POST",
-                        url: "/update_like",
+                        url: "list/update_like",
                         data: {
                             post_id_give: post_id,
                             type_give: type,
@@ -268,7 +277,7 @@
                 } else {
                     $.ajax({
                         type: "POST",
-                        url: "/update_like",
+                        url: "list/update_like",
                         data: {
                             post_id_give: post_id,
                             type_give: type,
@@ -338,6 +347,7 @@
                                 <span class="tag is-warning is-light is-rounded ">양식</span>
                                 <span class="tag is-warning is-light is-rounded ">아시안</span>
                                 <span class="tag is-warning is-light is-rounded ">기타</span>
+
                             </div>
                         </div>
                     </section>
@@ -367,7 +377,7 @@
         <p id="clickLatlng">-</p>
         <p>이시군요!</p>
         <div class="" id="location">
-            <div id="map"></div>
+            <div id="map" style="width:100%;height:300px;"></div>
         </div>
         <div id="file-with-js"
              class="file has-name is-expanded">
@@ -417,6 +427,7 @@
             };
 
             let map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
+            setTimeout(function(){ map.relayout(); }, 2000);
             let currentLocation = () => {
                 if (navigator.geolocation) {
 
@@ -477,6 +488,7 @@
                     map.setCenter(locPosition);
                 }
             }
+
         </script>
         <script>
             // Select the input element using
