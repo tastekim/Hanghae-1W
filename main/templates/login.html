@@ -24,6 +24,8 @@
         <!-- JS -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+
+
         <style>
             body {
                 background-color: #fff{#RGBA(232, 52, 78, 0.2)#};
@@ -40,12 +42,6 @@
                 margin: auto;
             }
 
-            .title {
-                font-weight: 800;
-                font-size: 5rem;
-                font-family: 'Gugi', cursive;
-            }
-
             .subtitle {
                 font-size: 2rem;
                 font-family: 'Dongle', sans-serif;
@@ -56,6 +52,10 @@
             {#font-family: 'Gugi', cursive;
             {#font-family: 'Noto Sans KR', sans-serif;#}
 
+            .connect {
+                {#font-family: 'Dongle', sans-serif;#}
+                font-size:1.5rem !important;
+            }
 
             .is-sparta {
                 color: rgb(255, 193, 7) !important;
@@ -69,8 +69,11 @@
 
             .button.is-sparta.is-outlined {
                 background-color: dimgray;
-                border-color: dimgray;
                 color: #fff !important;
+            }
+
+            .button:hover{
+                background-color : darkorange !important;
             }
 
             .help {
@@ -171,6 +174,11 @@
 
             }
 
+            function connect_in() {
+                $("#log-in-box").toggleClass("is-hidden")
+                $("#connect-button").toggleClass("is-hidden")
+            }
+
             function toggle_sign_up() {
                 $("#sign-up-box").toggleClass("is-hidden")
                 $("#div-sign-in-or-up").toggleClass("is-hidden")
@@ -225,21 +233,31 @@
             }
         </script>
 
+
     </head>
     <body>
         <section class="hero">
+            {#여기에 화면 로딩페이지 여기에 넣으면 될듯#}
             <div class="hero-body has-text-centered" style="padding-bottom:1rem;margin:auto;">
                 <h3 class="subtitle is-sparta">세상의 모든</h3>
                 {#<h1 class="title is-sparta">요리조리</h1>#}
                 <img src="../static/Yoryjory.png" alt="세상의 모든 요리조리">
-
             </div>
         </section>
         <section class="section">
             <div class="container">
                 <div class="box" style="max-width: 480px;margin:auto">
                     <article class="media">
-                        <div class="media-content">
+                        {#여기서부터 내가 삽입#}
+                        <div class="media-content" id="connect-button">
+                            <nav class="level is-mobile">
+                                <button class="level-item button is-sparta connect" onclick="connect_in()">
+                                    접속하기 !
+                                </button>
+                            </nav>
+                        </div>
+                        {#여기까지#}
+                        <div class="media-content is-hidden" id="log-in-box">   {#.is-hidden, #log-in-box 추가#}
                             <div class="content">
                                 <div class="field has-addons">
                                     <div class="control has-icons-left" style="width:100%">
@@ -269,7 +287,6 @@
                                     <button class="level-item button is-sparta" onclick="sign_in()">
                                         로그인
                                     </button>
-
                                 </nav>
                                 <hr>
                                 <h4 class="mb-3">아직 회원이 아니라면</h4>
