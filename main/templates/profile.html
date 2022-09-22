@@ -203,7 +203,11 @@
 <nav class="navbar is-fixed-top is-white" role="navigation" aria-label="main navigation">
     <div class="navbar-brand">
         <a class="navbar-item" href="/">
-            <img src="{{ url_for('static', filename='logo.png') }}">
+            <img src="{{ url_for('static', filename='taco.png') }}">
+            <img src="{{ url_for('static', filename='logo.png.png') }}">
+            <strong class="is-sparta"
+                    style="font-family: 'Stylish', sans-serif;font-size: larger;"></strong>
+
         </a>
     </div>
 </nav>
@@ -379,7 +383,7 @@
             <div class="media-content">
                 <div class="field">
                     <p class="control">
-                        <input id="input-post" class="input is-rounded" placeholder="무슨 생각을 하고 계신가요?"
+                        <input id="input-post" class="input is-rounded" placeholder="오늘 무엇을 드셨나요?🤗"
                                onclick='$("#modal-post").addClass("is-active")'>
                     </p>
                 </div>
