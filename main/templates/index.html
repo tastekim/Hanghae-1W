@@ -31,11 +31,25 @@
                 padding-top: 3.25rem;
             }
 
+
             .section {
                 padding: 1rem 1.5rem;
                 max-width: 750px;
                 margin: auto;
             }
+
+
+            {#.navbar{#}
+            {#    Justify-content:center;]#}
+            {#    size: 100px#}
+            {#}#}
+            {##}
+
+            .hero{
+                background-color: rgb(255, 193, 7);
+            }
+
+
 
             .is-sparta {
                 color: #e8344e !important;
@@ -76,7 +90,7 @@
                 margin: auto;
             }
 
-            .tagsbox{
+            .button-tag{
                 margin-bottom: 50px;
             }
 
@@ -278,7 +292,7 @@
                                     }
 
                                     let count_heart=post['count_heart']
-
+                                    let file = posts[i]['file']
                                     let html_temp = `<div class="box" id="${post["_id"]}">
                                             <article class="media">
                                                 <div class="media-left">
@@ -379,19 +393,43 @@
 
 <body>
 
-        <!--로고 보여지는 곳 / 로고사진바꿔야함-->
-        <nav class="navbar is-fixed-top is-white" role="navigation" aria-label="main navigation">
+
+        <!--로고 보여지는 곳 -->
+        <nav class="navbar is-fixed-top is-white " role="navigation" aria-label="main navigation">
             <div class="navbar-brand">
                 <a class="navbar-item" href="/">
+<<<<<<< HEAD
                     <img src="{{ url_for('static', filename='logo.png') }}">
 
+=======
+                    <img  src="{{ url_for('static', filename='taco.png') }}">
+                    <img  src="{{ url_for('static', filename='logo.png.png') }}">
+                    <strong class="is-sparta"
+                            style="font-family: 'Stylish', sans-serif;font-size: larger;"></strong>
+>>>>>>> 07de0e880654a8f020a0c4089fdc7cbe7e791e26
                 </a>
             </div>
         </nav>
 
 
-        <!--'오늘 뭐 드셨어요' 포스팅 세션 / href 와 src 프로필파일로 바꿀 수 있도록 변경함/ 오류확인필요-->
-                    <section class="section ">
+
+
+
+
+        <section class="hero  is-halfheight ">
+            <div class="hero-body" style="padding-bottom:1rem;margin:0 auto;min-width: 400px">
+            
+
+             <img  src="{{ url_for('static', filename='whitelogo.png') }}" style="width:100%">
+            </div>
+        </section>
+
+ <!--'오늘 뭐 드셨어요' 포스팅 세션 / href 와 src 프로필파일로 바꿀 수 있도록 변경함/ 오류확인필요-->
+ <section class="hero  is-small ">
+            <div class="hero-body" ">
+
+
+              <section class="section ">
                         <article class="media">
                             <figure class="media-left" style="align-self: center">
                                 <a class="image is-32x32" href="/user/{{ user_info.username }}">
@@ -409,18 +447,28 @@
                         </article>
 
                     </section>
+            </div>
+        </section>
+
+
+
+
 
 
         <!--태그-->
+
+
                     <section>
                         <div class="tags">
-                            <div class="tags are-large ">
-                                <span class="tag is-warning is-light is-rounded ">한식</span>
-                                <span class="tag is-warning is-light is-rounded ">중식</span>
-                                <span class="tag is-warning is-light is-rounded ">일식</span>
-                                <span class="tag is-warning is-light is-rounded ">양식</span>
-                                <span class="tag is-warning is-light is-rounded ">아시안</span>
-                                <span class="tag is-warning is-light is-rounded ">기타</span>
+                            <div class="button-tag  ">
+
+                                <button class="button is-small is-warning is-light is-rounded">한식</button>
+                                <button class="button is-small is-warning is-light is-rounded">일식</button>
+                                <button class="button is-small is-warning is-light is-rounded">중식</button>
+                                <button class="button is-small is-warning is-light is-rounded">양식</button>
+                                <button class="button is-small is-warning is-light is-rounded">아시안</button>
+                                <button class="button is-small is-warning is-light is-rounded">기타</button>
+
                             </div>
                         </div>
                     </section>
