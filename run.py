@@ -1,6 +1,12 @@
 
 from main import *
 
+@app.route('/login')
+def login():
+    msg = request.args.get("msg")
+    return render_template('login.html', msg=msg)
+
+
 @app.route('/')
 def home():
     token_receive = request.cookies.get('mytoken')
