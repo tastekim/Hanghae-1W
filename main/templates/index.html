@@ -182,7 +182,6 @@
                 }
 
 
-                <!--list get 함수-->
                 function get_posts(username) {
                     if (username==undefined) {
                         username=""
@@ -190,7 +189,7 @@
                     $("#post-box").empty()
                     $.ajax({
                         type: "GET",
-                        url: "/list/get_posts",
+                        url: `/list/get_posts?username_give=${username}`,
                         data: {},
                         success: function (response) {
                             if (response["result"] == "success") {
@@ -261,6 +260,7 @@
                         }
                     })
                 }
+
             $(document).ready(function () {
                 get_posts()
             })
@@ -436,29 +436,6 @@
                     </section>
             </div>
         </section>
-
-
-
-
-
-
-        <!--태그-->
-
-
-                    <section>
-                        <div class="tags">
-                            <div class="button-tag  ">
-
-                                <button class="button is-small is-warning is-light is-rounded">한식</button>
-                                <button class="button is-small is-warning is-light is-rounded">일식</button>
-                                <button class="button is-small is-warning is-light is-rounded">중식</button>
-                                <button class="button is-small is-warning is-light is-rounded">양식</button>
-                                <button class="button is-small is-warning is-light is-rounded">아시안</button>
-                                <button class="button is-small is-warning is-light is-rounded">기타</button>
-
-                            </div>
-                        </div>
-                    </section>
 
         <!--modal 포스팅박스 -->
                     <div class="modal" id="modal-post">

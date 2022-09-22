@@ -9,7 +9,7 @@ import jwt
 
 # db 연결
 ca = certifi.where()
-client = MongoClient('mongodb://15.164.214.98', 27017, username="test", password="test")
+client = MongoClient('mongodb://43.200.176.41', 27017, username="test", password="test")
 db = client.yoryjory
 
 SECRET_KEY = 'SPARTA'

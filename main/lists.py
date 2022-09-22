@@ -6,7 +6,7 @@ bp_lists = Blueprint("lists", __name__, url_prefix="/list", template_folder='tem
 
 # db 연결
 ca = certifi.where()
-client = MongoClient('mongodb://15.164.214.98', 27017, username="test", password="test")
+client = MongoClient('mongodb://43.200.176.41', 27017, username="test", password="test")
 db = client.yoryjory
 
 SECRET_KEY = 'SPARTA'
@@ -14,37 +14,6 @@ SECRET_KEY = 'SPARTA'
 @bp_lists.route('/')
 def listpage():
     return render_template('index.html')
-
-
-# 이 부분을 어떻게 할지 못 정함 / def home 이 init.py에 있기 때문에
-# @app.route('/')
-# def home():
-#     token_receive = request.cookies.get('mytoken')
-#     try:
-#         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
-#         user_info = db.users.find_one({"username": payload["id"]})
-#         return render_template('index.html', user_info=user_info)
-#     except jwt.ExpiredSignatureError:
-#         return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
-#     except jwt.exceptions.DecodeError:
-#         return redirect(url_for("login", msg="로그인 정보가 존재하지 않습니다."))
-#
-
-
-
-# post 쪽에서 이걸 받아와야함 승훈님이 보내주신 것에는 id/username/date/프로필사진이 없으니까 이걸 받아와야할 함수?가 필요
-# user_info = db.users.find_one({"username": payload["id"]})
-# comment_receive = request.form["comment_give"]
-# date_receive = request.form["date_give"]
-# doc = {
-#     "username": user_info["username"],
-#     "profile_name": user_info["profile_name"],
-#     "profile_pic_real": user_info["profile_pic_real"],
-#     "comment": comment_receive,
-#     "date": date_receive
-# }
-# db.posts.insert_one(doc)
-
 
 @bp_lists.route("/select_food/<selectfood>", methods=['GET'])
 def get_selectfood(selectfood):
