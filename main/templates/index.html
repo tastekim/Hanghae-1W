@@ -31,11 +31,25 @@
                 padding-top: 3.25rem;
             }
 
+
             .section {
                 padding: 1rem 1.5rem;
                 max-width: 750px;
                 margin: auto;
             }
+
+
+            {#.navbar{#}
+            {#    Justify-content:center;]#}
+            {#    size: 100px#}
+            {#}#}
+
+
+            .hero{
+                background-color: rgb(255, 193, 7);
+            }
+
+
 
             .is-sparta {
                 color: #e8344e !important;
@@ -177,11 +191,13 @@
                     $("#post-box").empty()
                     $.ajax({
                         type: "GET",
-                        url: "/get_posts",
+                        url: "/list/get_posts",
                         data: {},
                         success: function (response) {
                             if (response["result"] == "success") {
                                 let posts = response["posts"]
+                                console.log(posts)
+
                                 for (let i = 0; i < posts.length; i++) {
                                     let post = posts[i]
                                     let time_post = new Date(post["date"])
@@ -194,7 +210,7 @@
                                     }
 
                                     let count_heart=post['count_heart']
-
+                                    let file = posts[i]['file']
                                     let html_temp = `<div class="box" id="${post["_id"]}">
                                             <article class="media">
                                                 <div class="media-left">
@@ -226,7 +242,7 @@
                                                         <div class="card">
                                                             <div class="card-image">
                                                                 <figure class="image is-4by3">
-                                                                    <img src="/main/static/${post['file']}
+                                                                    <img src="../static/${file}"
                                                                          alt="Placeholder image">
                                                                 </figure>
                                                         </div>
@@ -253,7 +269,7 @@
                 if ($i_like.hasClass("fa-heart")) {
                     $.ajax({
                         type: "POST",
-                        url: "/update_like",
+                        url: "list/update_like",
                         data: {
                             post_id_give: post_id,
                             type_give: type,
@@ -268,7 +284,7 @@
                 } else {
                     $.ajax({
                         type: "POST",
-                        url: "/update_like",
+                        url: "list/update_like",
                         data: {
                             post_id_give: post_id,
                             type_give: type,
@@ -295,16 +311,33 @@
 
 <body>
 
-        <!--로고 보여지는 곳 / 로고사진바꿔야함-->
-        <nav class="navbar is-fixed-top is-white" role="navigation" aria-label="main navigation">
+
+        <!--로고 보여지는 곳 -->
+        <nav class="navbar is-fixed-top is-white " role="navigation" aria-label="main navigation">
             <div class="navbar-brand">
                 <a class="navbar-item" href="/">
-                    <img src="{{ url_for('static', filename='logo.png') }}">
+                    <img  src="{{ url_for('static', filename='logo.png.png') }}">
                     <strong class="is-sparta"
-                            style="font-family: 'Stylish', sans-serif;font-size: larger;">YORYJORY</strong>
+                            style="font-family: 'Stylish', sans-serif;font-size: larger;"></strong>
                 </a>
             </div>
         </nav>
+
+
+
+
+
+
+        <section class="hero  is-halfheight ">
+            <div class="hero-body" style="padding-bottom:1rem;margin:auto;min-width: 400px">
+            
+
+             <img  src="{{ url_for('static', filename='whitelogo.png') }}">
+            </div>
+        </section>
+
+
+
 
 
         <!--'오늘 뭐 드셨어요' 포스팅 세션 / href 와 src 프로필파일로 바꿀 수 있도록 변경함/ 오류확인필요-->
