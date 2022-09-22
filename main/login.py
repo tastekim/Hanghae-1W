@@ -1,8 +1,8 @@
 from main import *
-from flask import Blueprint, request
+from flask import Blueprint, request,url_for
 import certifi
 
-bp_login = Blueprint("login", __name__, url_prefix="/login", template_folder='templates')
+bp_login = Blueprint("login", __name__, url_prefix="/login", template_folder='templates', static_folder='static')
 
 # db 연결
 ca = certifi.where()

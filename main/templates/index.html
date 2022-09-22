@@ -3,12 +3,9 @@
     <head>
 
         <!-- Webpage Title -->
-<<<<<<< HEAD
-        <title>Home | YORYJORY</title>
-=======
         <title>요리조리</title>
         <link rel="shortcut icon" href="../static/yoryjory_pic_un.png" type="image/x-icon">
->>>>>>> 9540bfb46c6c12636a8e2256e060e4455adc9c56
+
 
         <!-- Required meta tags -->
         <meta charset="utf-8">
@@ -28,7 +25,6 @@
 
 
         <style>
-
 
             body {
                 background-color: rgb(255, 193, 7);
@@ -166,7 +162,7 @@
 
         <script>
 
-            <!--list에 입력되는 시간-->
+            {#List에 입력되는 시간#}
                 function time2str(date) {
                     let today = new Date()
                     let time = (today - date) / 1000 / 60  // 분
@@ -195,7 +191,6 @@
                     $.ajax({
                         type: "GET",
                         url: "/list/get_posts",
-<<<<<<< HEAD
                         data: {},
                         success: function (response) {
                             if (response["result"] == "success") {
@@ -251,7 +246,7 @@
                                                             <div class="card-image">
                                                                 <figure class="image is-4by3">
 
-                                                                    <img src= "../static/${file}">
+                                                                    <img src= "../static/img/${file}">
 
                                                                 </figure>
                                                         </div>
@@ -289,7 +284,6 @@
                                     } else {
                                         class_heart = "fa-heart-o"
                                     }
-                                    let file = posts[i]['file']
                                     let count_heart=post['count_heart']
                                     let file = posts[i]['file']
                                     let html_temp = `<div class="box" id="${post["_id"]}">
@@ -323,11 +317,9 @@
                                                         <div class="card">
                                                             <div class="card-image">
                                                                 <figure class="image is-4by3">
-<<<<<<< HEAD
-                                                                    <img src="{{ url_for('static', filename=user_info.file) }}"
-=======
+
                                                                     <img src="../static/${file}"}
->>>>>>> 9540bfb46c6c12636a8e2256e060e4455adc9c56
+
                                                                          alt="Placeholder image">
                                                                 </figure>
                                                         </div>
@@ -371,13 +363,7 @@
                 } else {
                     $.ajax({
                         type: "POST",
-<<<<<<< HEAD
-
                         url: "list/update_like",
-
-=======
-                        url: "/list/update_like",
->>>>>>> 9540bfb46c6c12636a8e2256e060e4455adc9c56
                         data: {
                             post_id_give: post_id,
                             type_give: type,
@@ -415,11 +401,6 @@
             </div>
         </nav>
 
-
-
-
-
-
         <section class="hero  is-halfheight ">
             <div class="hero-body" style="padding-bottom:1rem;margin:0 auto;min-width: 400px">
             
@@ -430,7 +411,7 @@
 
  <!--'오늘 뭐 드셨어요' 포스팅 세션 / href 와 src 프로필파일로 바꿀 수 있도록 변경함/ 오류확인필요-->
  <section class="hero  is-small ">
-            <div class="hero-body" ">
+            <div class="hero-body">
 
 
               <section class="section ">
@@ -444,14 +425,10 @@
                             <div class="media-content">
                                 <div class="field">
                                     <p class="control">
-<<<<<<< HEAD
+
                                           <input id="input-post" class="input is-rounded " placeholder="오늘 무엇을 드셨나요?🤗"
                                                  onclick='$("#modal-post").addClass("is-active")'>                </p>
-=======
-                                          <input id="input-post" class="input is-rounded " placeholder="오늘 뭐 드셨나요?"
-                                                 onclick='$("#modal-post").addClass("is-active")'>
-                                    </p>
->>>>>>> 9540bfb46c6c12636a8e2256e060e4455adc9c56
+
                                 </div>
                             </div>
                         </article>

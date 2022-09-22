@@ -15,18 +15,23 @@
 
     <style>
 
-
         body {
             background-color: rgb(255, 193, 7);
             min-height: 100vh;
             padding-top: 3.25rem;
         }
 
+
         .section {
             padding: 1rem 1.5rem;
             max-width: 750px;
             margin: auto;
         }
+
+        .hero {
+            background-color: rgb(255, 193, 7);
+        }
+
 
         .is-sparta {
             color: #e8344e !important;
@@ -68,13 +73,13 @@
             margin: auto;
         }
 
-        .tagsbox {
+        .button-tag {
             margin-bottom: 50px;
         }
 
         .landing {
             text-align: center;
-            width: 50vw;
+
             margin: auto;
             padding-top: 50px;
             padding-bottom: 50px;
@@ -102,8 +107,8 @@
         }
 
         #location #map {
-            width: 50vw;
-            height: 400px;
+            width: 100%;
+            height: 200px;
         }
 
         #clickLatlng {
@@ -200,7 +205,6 @@
         }
     </script>
 </head>
-<<<<<<< HEAD
 <body class="has-navbar-fixed-top">
 <nav class="navbar is-fixed-top is-white" role="navigation" aria-label="main navigation">
     <div class="navbar-brand">
@@ -211,38 +215,6 @@
                     style="font-family: 'Stylish', sans-serif;font-size: larger;"></strong>
 
         </a>
-=======
-<body>
-<section class="hero is-white">
-    <div class="hero-body" style="padding-bottom:1rem;margin:auto;min-width: 400px">
-        <article class="media">
-            <figure class="media-left image is-128x128" style="align-self: center">
-                <img class="is-rounded" src="{{ url_for('static', filename=user_info.profile_pic_real) }}">
-            </figure>
-            <div class="media-content">
-                <div class="content">
-                    <p>
-                        <strong>{{ user_info.profile_name }}</strong>
-                        <br>
-                    <p>{{ user_info.profile_info }}</p>
-                    </p>
-                </div>
-            </div>
-        </article>
-        <nav id="btns-me" class="level is-mobile" style="margin-top:2rem">
-            <a class="button level-item has-text-centered is-sparta" aria-label="edit"
-               onclick='$("#modal-edit").addClass("is-active")'>
-                프로필 수정<span class="icon is-small"><i class="fa fa-pencil"
-                                                                       aria-hidden="true"></i></span>
-            </a>
-
-            <a class="button level-item has-text-centered is-sparta is-outlined" aria-label="logout"
-               onclick="sign_out()">
-                로그아웃<span class="icon is-small"><i class="fa fa-sign-out"
-                                                                     aria-hidden="true"></i></span>
-            </a>
-        </nav>
->>>>>>> 9540bfb46c6c12636a8e2256e060e4455adc9c56
     </div>
 </nav>
 <div class="modal" id="modal-edit">
@@ -474,46 +446,76 @@
             success: function (response) {
                 if (response["result"] == "success") {
                     let posts = response["posts"]
+                    console.log(posts)
                     for (let i = 0; i < posts.length; i++) {
+
                         let post = posts[i]
                         let time_post = new Date(post["date"])
                         let time_before = time2str(time_post)
-                        let class_heart = post['heart_by_me'] ? "fa-heart" : "fa-heart-o" //삼항 연산자
-                        let count_heart = post['count_heart']
-                        let html_temp = `<div class="box" id="${post["_id"]}">
-                                        <article class="media">
-                                            <div class="media-left">
-                                                <a class="image is-64x64" href="/user/${post['username']}">
-                                                    <img class="is-rounded" src="/static/${post['profile_pic_real']}"
-                                                         alt="Image">
-                                                </a>
-                                            </div>
-                                            <div class="media-content">
-                                                <div class="content">
-                                                    <p>
-                                                        <strong>${post['profile_name']}</strong> <small>@${post['username']}</small> <small>${time_before}</small>
-                                                        <br>
-                                                        ${post['comment']}
-                                                    </p>
-                                                </div>
-                                                <nav class="level is-mobile">
-                                                    <div class="level-left">
-                                                        <a class="level-item is-sparta" aria-label="heart" onclick="toggle_like('${post['_id']}', 'heart')">
-                                                            <span class="icon is-small"><i class="fa ${class_heart}"
-                                                                                           aria-hidden="true"></i></span>&nbsp;<span class="like-num">${num2str(count_heart)}</span>
-                                                        </a>
-                                                    </div>
+                        let class_heart = ""
+                        if (post["heart_by_me"]) {
+                            class_heart = "fa-heart"
+                        } else {
+                            class_heart = "fa-heart-o"
+                        }
+                        let file = posts[i]['file']
 
-                                                </nav>
-                                            </div>
-                                        </article>
-                                    </div>`
+                        let count_heart = post['count_heart']
+
+
+                        let html_temp = `<div class="box" id="${post["_id"]}">
+                                            <article class="media">
+                                                <div class="media-left">
+                                                    <a class="image is-64x64" href="/user/${post['username']}">
+
+                                                        <img class="is-rounded" src="../static/${post['profile_pic_real']}"
+
+                                                             alt="Image">
+                                                    </a>
+                                                </div>
+                                                <div class="media-content">
+                                                    <div class="content">
+
+                                                        <p>
+                                                            <strong>${post['profile_name']}</strong><small>@${post['username']}</small> <small>${time_before}</small>
+                                                            <br>
+                                                            <small>${post['location']}</small>  <small>${post['selectFood']}</small>
+                                                            <br>
+                                                            ${post['content']}
+                                                        </p>
+                                                    </div>
+                                                    <nav class="level is-mobile">
+                                                        <div class="level-left">
+                                                            <a class="level-item is-sparta" aria-label="heart" onclick="toggle_like('${post['_id']}', 'heart')">
+                                                                <span class="icon is-small"><i class="fa ${class_heart}"
+                                                                                               aria-hidden="true"></i></span>&nbsp;<span class="like-num">${count_heart}</span>
+                                                            </a>
+                                                        </div>
+
+                                                    </nav>
+                                                        <div class="card">
+                                                            <div class="card-image">
+                                                                <figure class="image is-4by3">
+
+                                                                    <img src= "../static/img/${file}">
+
+                                                                </figure>
+                                                        </div>
+
+
+                                                </div>
+                                            </article>
+                                        </div>`
                         $("#post-box").append(html_temp)
                     }
                 }
             }
         })
     }
+
+    $(document).ready(function () {
+        get_posts({{ user_info.username }})
+    })
 </script>
 </body>
 <script>
@@ -526,6 +528,9 @@
     };
 
     let map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
+    setTimeout(function () {
+        map.relayout();
+    }, 2000);
     let currentLocation = () => {
         if (navigator.geolocation) {
 

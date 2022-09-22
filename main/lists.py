@@ -2,7 +2,7 @@ from main import *
 from flask import Blueprint, request
 import certifi
 
-bp_lists = Blueprint("lists", __name__, url_prefix="/list", template_folder='templates')
+bp_lists = Blueprint("lists", __name__, url_prefix="/list", template_folder='templates',static_folder='static')
 
 # db 연결
 ca = certifi.where()
@@ -66,7 +66,11 @@ def get_posts():
     token_receive = request.cookies.get('mytoken')
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
-        posts = list(db.posts.find({}).sort("date", -1).limit(20))
+        username_receive = request.args.get("username_give")
+        if username_receive == "":
+            posts = list(db.posts.find({}).sort("date", -1).limit(20))
+        else:
+            posts = list(db.posts.find({"username": username_receive}).sort("date", -1).limit(20))
         for post in posts:
             post["_id"] = str(post["_id"])
             post["count_heart"] = db.likes.count_documents({"post_id": post["_id"], "type": "heart"})

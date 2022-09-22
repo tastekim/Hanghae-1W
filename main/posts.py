@@ -9,7 +9,7 @@ db = client.yoryjory
 
 SECRET_KEY = 'SPARTA'
 
-bp_post = Blueprint("posts", __name__, url_prefix="/posts", template_folder='templates')
+bp_post = Blueprint("posts", __name__, url_prefix="/posts", template_folder='templates', static_folder='static')
 
 
 @bp_post.route('/posting', methods=['POST'])
@@ -28,7 +28,7 @@ def posting():
         today = datetime.now()
         mytime = today.strftime('%Y-%m-%d-%H-%M-%S')
         filename = f'file-{mytime}'
-        save_to = f'main/static/{filename}.{extension}'
+        save_to = f'main/static/img/{filename}.{extension}'
         file.save(save_to)
 
         doc = {

@@ -14,7 +14,7 @@ db = client.yoryjory
 
 SECRET_KEY = 'SPARTA'
 
-bp_user = Blueprint("user", __name__, url_prefix="/user", template_folder='templates')
+bp_user = Blueprint("user", __name__, url_prefix="/user", template_folder='templates', static_folder='static')
 
 @bp_user.route('/<username>')
 def user(username):

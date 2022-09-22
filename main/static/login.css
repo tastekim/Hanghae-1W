@@ -1,0 +1,47 @@
+body {
+    background-color: #fff;
+    background-image: url("https://upload.wikimedia.org/wikipedia/commons/a/a6/Foods_-_Idil_Keysan_-_Wikimedia_Giphy_stickers_2019.gif");
+    background-size: 400px;
+    background-position: bottom;
+    background-repeat: repeat-x;
+    min-height: 100vh;
+}
+
+.section {
+    padding: 1rem 1.5rem;
+    max-width: 750px;
+    margin: auto;
+}
+
+.subtitle {
+    font-size: 2rem;
+    font-family: 'Dongle', sans-serif;
+}
+
+.connect {
+    font-family: 'Dongle', sans-serif;
+    font-size: 1.5rem !important;
+}
+
+.is-sparta {
+    color: rgb(255, 193, 7) !important;
+}
+
+.button.is-sparta {
+    background-color: rgb(255, 193, 7);
+    border-color: transparent;
+    color: #fff !important;
+}
+
+.button.is-sparta.is-outlined {
+    background-color: dimgray;
+    color: #fff !important;
+}
+
+.button:hover {
+    background-color: darkorange !important;
+}
+
+.help {
+    color: gray;
+}
